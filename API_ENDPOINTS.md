@@ -3,9 +3,18 @@
 Complete API reference for CreditSea Loan Backend system with detailed request/response examples. **✅ All APIs tested and validated with MongoDB Atlas Cloud Database.**
 
 ## Base URL
+
+**🌐 Production (Live):**
+```
+https://creditsea-loan-backend.onrender.com/api
+```
+
+**🔧 Local Development:**
 ```
 http://localhost:5001/api
 ```
+
+**✅ Status**: Both environments fully operational and tested
 
 ## Database
 - **MongoDB Atlas Cloud**: Connected to cloud database cluster

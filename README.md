@@ -119,11 +119,25 @@ CORS_ORIGIN=http://localhost:3000
 4. Replace `<username>`, `<password>`, and `<cluster-url>` in MONGO_URI
 5. Ensure your IP is whitelisted in Atlas Network Access
 
-## 🏃‍♂️ Usage
+## 🚀 **Live Deployment**
 
-### Development Mode
-```bash
-npm run dev
+**� Production URL**: `https://creditsea-loan-backend.onrender.com`
+
+### **Deployment Details:**
+- **Platform**: Render.com
+- **Status**: ✅ Live and fully operational
+- **Database**: MongoDB Atlas Cloud
+- **Environment**: Production-ready
+- **All APIs**: Tested and working on live server
+
+### **API Base URL (Production):**
+```
+https://creditsea-loan-backend.onrender.com/api
+```
+
+### **Local Development URL:**
+```
+http://localhost:5001/api
 ```
 Server will start at `http://localhost:5001` with hot reload enabled.
 
