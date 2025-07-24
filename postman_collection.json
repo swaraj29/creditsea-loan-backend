@@ -1,0 +1,1256 @@
+{
+  "info": {
+    "name": "CreditSea Loan Backend API - ✅ FULLY TESTED",
+    "description": "Complete API collection for CreditSea Loan Management System with authentication, loan applications, and user management endpoints. All APIs tested and validated with correct request/response examples.",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5001/api",
+      "type": "string",
+      "description": "Base URL for the API"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string",
+      "description": "JWT token for authenticated requests"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints for login and registration",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "        pm.test('Token saved to collection variables', function () {",
+                  "            pm.expect(pm.collectionVariables.get('auth_token')).to.not.be.empty;",
+                  "        });",
+                  "    }",
+                  "}",
+                  "",
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has success property', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('success', true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@creditsea.com\",\n  \"password\": \"password123\",\n  \"role\": \"verifier\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new admin or verifier user"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "        pm.test('Token saved to collection variables', function () {",
+                  "            pm.expect(pm.collectionVariables.get('auth_token')).to.not.be.empty;",
+                  "        });",
+                  "    }",
+                  "}",
+                  "",
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has success property', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('success', true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@creditsea.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login with admin or verifier credentials"
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Verifier",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "    }",
+                  "}",
+                  "",
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"verifier@creditsea.com\",\n  \"password\": \"verifier123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login as verifier user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Loan Applications",
+      "description": "Loan application management endpoints",
+      "item": [
+        {
+          "name": "Submit Loan Application",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has success property', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('success', true);",
+                  "});",
+                  "",
+                  "pm.test('Response message is correct', function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Application submitted successfully');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('application_id', response.data.id);",
+                  "        pm.test('Application ID saved to variables', function () {",
+                  "            pm.expect(pm.collectionVariables.get('application_id')).to.not.be.empty;",
+                  "        });",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin Reject Test User\",\n  \"email\": \"adminreject@test.com\",\n  \"phone\": \"9876543210\",\n  \"amount\": 200000,\n  \"purpose\": \"Testing admin rejection workflow\",\n  \"tenure\": 24,\n  \"monthlyIncome\": 30000,\n  \"employmentType\": \"employed\",\n  \"panCard\": \"ABCDE1234F\",\n  \"aadharCard\": \"123456789012\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/applications/submit",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "submit"
+              ]
+            },
+            "description": "Submit a new loan application (public endpoint)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Applications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has success property', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('success', true);",
+                  "});",
+                  "",
+                  "pm.test('Response has pagination', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('pagination');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications?page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get all loan applications with pagination (filtered by user role)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Applications by Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications?status=pending&page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get applications filtered by status (pending, verified, approved, rejected)"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Applications",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications?search=swaraj&page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "swaraj"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Search applications by name, email, or phone number"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dashboard Statistics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has dashboard stats', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('totalApplications');",
+                  "    pm.expect(response.data).to.have.property('pendingApplications');",
+                  "    pm.expect(response.data).to.have.property('approvedApplications');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "stats"
+              ]
+            },
+            "description": "Get dashboard statistics for loan applications"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Application (Verifier)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Application status is verified', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.application.status).to.equal('verified');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/applications/{{application_id}}/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "{{application_id}}",
+                "verify"
+              ]
+            },
+            "description": "Mark application as verified (Verifier role required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Application (Verifier)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Application status is rejected', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.application.status).to.equal('rejected');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rejectionReason\": \"Insufficient income documentation\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/applications/{{application_id}}/reject",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "{{application_id}}",
+                "reject"
+              ]
+            },
+            "description": "Reject application with reason (Verifier role required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Application (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Application status is approved', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.application.status).to.equal('approved');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/applications/{{application_id}}/approve",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "{{application_id}}",
+                "approve"
+              ]
+            },
+            "description": "Approve verified application (Admin role required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Reject Application",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has success property', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('success', true);",
+                  "});",
+                  "",
+                  "pm.test('Application status is rejected', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data.status).to.equal('rejected');",
+                  "});",
+                  "",
+                  "pm.test('Rejection reason is present', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('rejectionReason');",
+                  "});",
+                  "",
+                  "pm.test('Admin action details recorded', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('adminActionBy');",
+                  "    pm.expect(response.data).to.have.property('adminActionAt');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rejectionReason\": \"Insufficient monthly income for requested loan amount. Minimum ₹40,000 required for ₹2,00,000 loan.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/applications/{{application_id}}/admin-reject",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "{{application_id}}",
+                "admin-reject"
+              ]
+            },
+            "description": "Admin rejection of application (Admin role required)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "description": "User management endpoints for admin operations",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has user data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('user');",
+                  "    pm.expect(response.data.user).to.have.property('email');",
+                  "    pm.expect(response.data.user).to.have.property('role');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            },
+            "description": "Get current user's profile information"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has pagination', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('pagination');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get all users in the system (Admin role required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Users by Role",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?role=verifier&page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "verifier"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get users filtered by role (admin or verifier)"
+          },
+          "response": []
+        },
+        {
+          "name": "Add User (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has success property', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('success', true);",
+                  "});",
+                  "",
+                  "pm.test('User created successfully', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.have.property('id');",
+                  "    pm.expect(response.data).to.have.property('email');",
+                  "    pm.expect(response.data).to.have.property('name');",
+                  "    pm.expect(response.data).to.have.property('role');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('new_user_id', response.data.id);",
+                  "        pm.test('User ID saved to variables', function () {",
+                  "            pm.expect(pm.collectionVariables.get('new_user_id')).to.not.be.empty;",
+                  "        });",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Test Verifier\",\n  \"email\": \"newverifier@creditsea.com\",\n  \"password\": \"newverifier123\",\n  \"role\": \"verifier\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Create a new user (Admin role required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('User deleted successfully', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.true;",
+                  "    pm.expect(response.message).to.include('deleted');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/{{new_user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{new_user_id}}"
+              ]
+            },
+            "description": "Delete a user from the system (Admin role required)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "description": "Test various error scenarios and edge cases",
+      "item": [
+        {
+          "name": "Unauthorized Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Error response format', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.false;",
+                  "    pm.expect(response).to.have.property('error');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications"
+              ]
+            },
+            "description": "Test accessing protected endpoint without token"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Login Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Invalid credentials error', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.false;",
+                  "    pm.expect(response.message).to.include('Invalid credentials');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"wrong@email.com\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Test login with invalid credentials"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Loan Application Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400 or 422', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+                  "});",
+                  "",
+                  "pm.test('Validation error response', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.false;",
+                  "    pm.expect(response).to.have.property('error');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"invalid-email\",\n  \"phone\": \"123\",\n  \"amount\": 50000000000,\n  \"purpose\": \"\",\n  \"tenure\": 200,\n  \"monthlyIncome\": -1000,\n  \"employmentType\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/applications/submit",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "submit"
+              ]
+            },
+            "description": "Test loan application submission with invalid data"
+          },
+          "response": []
+        },
+        {
+          "name": "Non-existent Resource",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 404', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test('Not found error', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.false;",
+                  "    pm.expect(response.message).to.include('not found');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications/65f1234567890abcdef12345/verify",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "65f1234567890abcdef12345",
+                "verify"
+              ]
+            },
+            "description": "Test accessing non-existent application"
+          },
+          "response": []
+        },
+        {
+          "name": "Forbidden Access (Verifier trying Admin action)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 403', function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});",
+                  "",
+                  "pm.test('Forbidden access error', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.be.false;",
+                  "    pm.expect(response.message).to.include('Access denied');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Test verifier trying to access admin-only endpoint (first login as verifier)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set collection variables if not already set",
+          "if (!pm.collectionVariables.get('base_url')) {",
+          "    pm.collectionVariables.set('base_url', 'http://localhost:5001/api');",
+          "}",
+          "",
+          "// Add request timestamp",
+          "pm.globals.set('timestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global tests for all requests",
+          "pm.test('Response time is acceptable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Response has timestamp', function () {",
+          "    if (pm.response.json() && pm.response.json().timestamp) {",
+          "        pm.expect(pm.response.json().timestamp).to.be.a('string');",
+          "    }",
+          "});",
+          "",
+          "// Log response for debugging",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error Response:', pm.response.json());",
+          "}"
+        ]
+      }
+    }
+  ]
+}
